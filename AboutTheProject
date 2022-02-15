@@ -1,0 +1,6 @@
+This code uses MPU 6050 demo code to properly read and use the MPU 6050 
+It is integrated into the reciever and the transmitter code
+
+When finished the code sould result in a brushed motor drone that is able to be controlled via an arduino controller 
+This controller will be on the hand of the operator.
+The drone will mimic a the movements of the hand, resulting in an easy to fly drone.
