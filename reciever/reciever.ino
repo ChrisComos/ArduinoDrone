@@ -6,10 +6,12 @@
 #include <Adafruit_Sensor.h>
 #include <Wire.h>
 #include <math.h>
+#include <Servo.h>
+
 Adafruit_MPU6050 mpu;
 //create an RF24 object
 RF24 radio(9, 10);  // CE, CSN
-
+Servo myservo;
 //address through which two modules communicate.
 const byte address[6] = "00001";
 typedef struct{
@@ -53,15 +55,16 @@ A_t dataR;
   
 void setup()
 {
+  myservo.attach(5);
   while (!Serial);
     Serial.begin(115200);
     Serial.print("Begin");
     // Try to initialize!
  if (!mpu.begin()) {
-    Serial.println("Failed to find MPU6050 chip");
-   while (1) {
-      delay(10);
-    }
+//    Serial.println("Failed to find MPU6050 chip");
+//   while (1) {
+//      delay(10);
+//    }
   }
   mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
   mpu.setGyroRange(MPU6050_RANGE_500_DEG);
@@ -83,9 +86,9 @@ void loop()
   mpu.getEvent(&a, &g, &temp);
 
   
-  Dpitch = 180 * atan (a.acceleration.x/sqrt(a.acceleration.y*a.acceleration.y + a.acceleration.z*a.acceleration.z))/M_PI;
-  Droll = 180 * atan (a.acceleration.y/sqrt(a.acceleration.x*a.acceleration.x + a.acceleration.z*a.acceleration.z))/M_PI;
-  Dyaw = 180 * atan (a.acceleration.z/sqrt(a.acceleration.x*a.acceleration.x + a.acceleration.y*a.acceleration.y))/M_PI;
+  double Dpitch = 180 * atan (a.acceleration.x/sqrt(a.acceleration.y*a.acceleration.y + a.acceleration.z*a.acceleration.z))/M_PI;
+  double Droll = 180 * atan (a.acceleration.y/sqrt(a.acceleration.x*a.acceleration.x + a.acceleration.z*a.acceleration.z))/M_PI;
+  double Dyaw = 180 * atan (a.acceleration.z/sqrt(a.acceleration.x*a.acceleration.x + a.acceleration.y*a.acceleration.y))/M_PI;
 
   
   if (radio.available())
@@ -93,7 +96,9 @@ void loop()
 //  delay(1000);
     radio.read(&dataR, sizeof(dataR));
     printVals(dataR);
-
+    double temp = dataR.pitch +90;
+    myservo.write(temp);
+    delay(5);
     if(dataR.pitch >= 0 && dataR.pitch < Dpitch){
       //left motors down
       }
