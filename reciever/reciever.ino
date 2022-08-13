@@ -20,38 +20,39 @@ typedef struct{
 }
 A_t;
 A_t dataR;
-//
-//  int milliOld, milliNew,dt;
-//
-//  //k values for control function
-//  float k1 = .5;
-//  float k2 = 100;
-//  float k3 = .001;
-//
-//  float rollTarget;
-//  float rollError = 0;
-//  float rollErrorOld;
-//  float rollErrorDif;       // error- errorold
-//  float rollErrorSlope = 0; //cahnge in error/change in time
-//  float rollErrorArea = 0;
-//  float rollVal;            //value of roll
-//
-//  float pitchTarget;
-//  float pitchError = 0;
-//  float pitchErrorOld;
-//  float pitchErrorDif;       // error- errorold
-//  float pitchErrorSlope = 0; //cahnge in error/change in time
-//  float pitchErrorArea = 0;
-//  float pitchVal;            //value of pitch
-//
-//  float yawTarget;
-//  float yawError = 0;
-//  float yawErrorOld;
-//  float yawErrorDif;         // error- errorold
-//  float yawErrorSlope = 0;  //cahnge in error/change in time
-//  float yawErrorArea = 0;
-//  float yawVal;           //value of yaw
-  
+
+ int milliOld, milliNew,dt;
+
+ //k values for control function
+ /*float k1 = .5;
+ float k2 = 100;
+ float k3 = .001;
+
+ float rollTarget;
+ float rollError = 0;
+ float rollErrorOld;
+ float rollErrorDif;       // error- errorold
+ float rollErrorSlope = 0; //cahnge in error/change in time
+ float rollErrorArea = 0;
+ float rollVal;            //value of roll
+
+ float pitchTarget;
+ float pitchError = 0;
+ float pitchErrorOld;
+ float pitchErrorDif;       // error- errorold
+ float pitchErrorSlope = 0; //cahnge in error/change in time
+ float pitchErrorArea = 0;
+ float pitchVal;            //value of pitch
+
+ float yawTarget;
+ float yawError = 0;
+ float yawErrorOld;
+ float yawErrorDif;         // error- errorold
+ float yawErrorSlope = 0;  //cahnge in error/change in time
+ float yawErrorArea = 0;
+ float yawVal;           //value of yaw
+ */
+
 void setup()
 {
   while (!Serial);
@@ -59,19 +60,21 @@ void setup()
     Serial.print("Begin");
     // Try to initialize!
  if (!mpu.begin()) {
-//    Serial.println("Failed to find MPU6050 chip");
-//   while (1) {
-//      delay(10);
-//    }
+/*
+Serial.println("Failed to find MPU6050 chip");
+  while (1) {
+     delay(10);
+   }
+*/
   }
   mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
   mpu.setGyroRange(MPU6050_RANGE_500_DEG);
   mpu.setFilterBandwidth(MPU6050_BAND_184_HZ);
   radio.begin();
-  
+
   //set the address
   radio.openReadingPipe(0, address);
-  
+
   //Set module as receiver
   radio.startListening();
 }
@@ -83,12 +86,12 @@ void loop()
   sensors_event_t a, g, temp;
   mpu.getEvent(&a, &g, &temp);
 
-  
+
   double Dpitch = 180 * atan (a.acceleration.x/sqrt(a.acceleration.y*a.acceleration.y + a.acceleration.z*a.acceleration.z))/M_PI;
   double Droll = 180 * atan (a.acceleration.y/sqrt(a.acceleration.x*a.acceleration.x + a.acceleration.z*a.acceleration.z))/M_PI;
   double Dyaw = 180 * atan (a.acceleration.z/sqrt(a.acceleration.x*a.acceleration.x + a.acceleration.y*a.acceleration.y))/M_PI;
 
-  
+
   if (radio.available())
   {
 //  delay(1000);
@@ -108,7 +111,7 @@ void loop()
       }
     if(dataR.yaw >= 0 && dataR.yaw > Dyaw){
       //
-      }    
+      }
     if(dataR.yaw >= 0 && dataR.yaw < Dyaw){
       //
       }
@@ -127,40 +130,26 @@ void loop()
       }
     if(dataR.yaw >= 1 && dataR.yaw > Dyaw){
       //
-      }    
+      }
     if(dataR.yaw >= 1 && dataR.yaw < Dyaw){
       //
       }
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-//    rollTarget = dataR.roll;      // attempt to get the 
+/*
+//    rollTarget = dataR.roll;      // attempt to get the
 //    pitchTarget = dataR.pitch;
 //    yawTarget = dataR.pitch;
-//    
-//    
-//    
-//    
-//    
-//    milliOld = milliNew;        //set new old to old new 
+//
+//
+//
+//
+//
+//    milliOld = milliNew;        //set new old to old new
 //    milliNew = millis();
 //    dt = milliNew - milliOld;
-//    
+//
 //    rollErrorOld = rollError;
 //    rollError = rollTarget-rollActual;
 //    rollErrorDif = rollError - rollErrorOld;
@@ -183,9 +172,10 @@ void loop()
 //    rollVal = rollVal + k1*rollError + k2*rollErrorSlope + k3*rollErrorArea;
 //    pitchVal = pitchVal + k1*pitchError + k2*pitchErrorSlope + k3*pitchErrorArea;
 //    yawVal = yawVal + k1*yawError + k2*yawErrorSlope + k3*yawErrorArea;
-//    
+//
 //    printf("Roll: %f\t Pitch: %f\t Yaw: %f\t\n", rollVal, pitchVal, yawVal);
-//    
+//
+*/
   }
 }
 
@@ -194,7 +184,7 @@ void loop()
 
 
 void printVals( A_t dataR){
-  
+
   Serial.print("Pitch: ");
   Serial.print(dataR.pitch);
   Serial.print(", Roll: ");
@@ -203,12 +193,6 @@ void printVals( A_t dataR){
   Serial.print(dataR.yaw);
   Serial.print(" rad/s");
   Serial.println();
-//    if(button == 0){
-//      digitalWrite(2,LOW);
-//    }
-//    else{
-//      digitalWrite(2,HIGH);
-//    }
    }
 
 void printOrientation(A_t dataR){
@@ -238,10 +222,4 @@ void printOrientation(A_t dataR){
   Serial.print(LR);
   Serial.print(" ");
   Serial.println(Far);
- 
-
-
-
-
-
 }
