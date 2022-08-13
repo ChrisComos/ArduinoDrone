@@ -1,4 +1,3 @@
- //Include Libraries
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
@@ -55,7 +54,6 @@ A_t dataR;
   
 void setup()
 {
-  myservo.attach(5);
   while (!Serial);
     Serial.begin(115200);
     Serial.print("Begin");
@@ -96,9 +94,6 @@ void loop()
 //  delay(1000);
     radio.read(&dataR, sizeof(dataR));
     printVals(dataR);
-    double temp = dataR.pitch +90;
-    myservo.write(temp);
-    delay(5);
     if(dataR.pitch >= 0 && dataR.pitch < Dpitch){
       //left motors down
       }
