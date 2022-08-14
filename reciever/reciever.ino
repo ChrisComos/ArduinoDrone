@@ -9,7 +9,7 @@
 
 Adafruit_MPU6050 mpu;
 //create an RF24 object
-RF24 radio(9, 10);  // CE, CSN
+RF24 radio(7, 8);  // CE, CSN
 Servo myservo;
 //address through which two modules communicate.
 const byte address[6] = "00001";
@@ -97,6 +97,15 @@ void loop()
 //  delay(1000);
     radio.read(&dataR, sizeof(dataR));
     printVals(dataR);
+
+    /*
+    Motor Pins : 	3, 5, 6, 9, 10
+    FrontLeftMotor  = 3
+    FrontRightMotor = 5
+    BackLeftMotor   = 9
+    BackRightMotor  = 10
+    */
+
     if(dataR.pitch >= 0 && dataR.pitch < Dpitch){
       //left motors down
       }
